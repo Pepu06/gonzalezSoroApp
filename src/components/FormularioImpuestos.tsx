@@ -185,6 +185,8 @@ export default function FormularioImpuestos() {
   const [showImpuesto, setShowImpuesto] = useState(false);
   const [showMes, setShowMes] = useState(false);
 
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
   useEffect(() => {
     if (user?.departamento && !isAdmin()) {
       setForm(f => ({ ...f, departamento: user.departamento }));
@@ -263,7 +265,7 @@ export default function FormularioImpuestos() {
       if (comprobante) {
         data.append("comprobante", { uri: comprobante.uri, name: comprobante.name, type: comprobante.type } as any);
       }
-      const res = await fetch("/api/impuestos", { method: "POST", body: data });
+      const res = await fetch(`${API_URL}/api/impuestos`, { method: "POST", body: data });
       if (!res.ok) throw new Error(await res.text());
       Alert.alert("Guardado", "Impuesto registrado correctamente.", [
         {

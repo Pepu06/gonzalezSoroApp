@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  Modal,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { Badge, Button, Card, IconButton, Input } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
-import { Card, Button, Badge, Input, IconButton } from '@/components/ui';
 import { theme } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
@@ -25,6 +25,9 @@ export default function ProfileScreen() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
 
   const handleLogout = () => {
     Alert.alert(
@@ -62,7 +65,7 @@ export default function ProfileScreen() {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/cambiar-password', {
+      const response = await fetch(`${API_URL}/api/auth/cambiar-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

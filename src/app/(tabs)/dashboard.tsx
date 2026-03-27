@@ -60,12 +60,14 @@ export default function DashboardScreen() {
   const [registros, setRegistros] = useState<Registro[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
 
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
   const fetchData = async () => {
     if (!user?.departamento) return;
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/impuestos?departamento=${encodeURIComponent(user.departamento)}`);
+      const response = await fetch(`${API_URL}/api/impuestos?departamento=${encodeURIComponent(user.departamento)}`);
       const data = await response.json();
 
       if (data.ok) {

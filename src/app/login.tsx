@@ -1,20 +1,20 @@
+import { Button, Input } from '@/components/ui';
+import { useAuth } from '@/context/AuthContext';
+import { theme } from '@/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
-import { useRouter } from 'expo-router';
-import { useAuth } from '@/context/AuthContext';
-import { Button, Input } from '@/components/ui';
-import { theme } from '@/theme';
-import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 export default function Login() {
@@ -22,6 +22,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
   const handleLogin = async () => {
     if (!password.trim()) {
@@ -31,7 +32,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),

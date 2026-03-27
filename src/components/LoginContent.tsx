@@ -18,12 +18,14 @@ export default function LoginContent() {
   const router = useRouter();
   const { login } = useAuth();
 
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
   const handleLogin = async () => {
     setError("");
     if (!password) { setError("Ingresá tu contraseña"); return; }
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),

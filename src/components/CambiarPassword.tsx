@@ -2,13 +2,13 @@ import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
-    ActivityIndicator, Alert,
-    KeyboardAvoidingView,
-    Modal,
-    Platform, ScrollView,
-    StyleSheet,
-    Text, TextInput, TouchableOpacity,
-    View,
+  ActivityIndicator, Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform, ScrollView,
+  StyleSheet,
+  Text, TextInput, TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function CambiarPassword() {
@@ -18,6 +18,8 @@ export default function CambiarPassword() {
   const [show, setShow] = useState({ actual: false, nueva: false, confirmar: false });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
   const canSubmit =
     !!form.actual.trim() &&
@@ -40,7 +42,7 @@ export default function CambiarPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/cambiar-password", {
+      const res = await fetch(`${API_URL}/api/auth/cambiar-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ departamento: user.departamento, passwordActual: form.actual, passwordNueva: form.nueva }),
