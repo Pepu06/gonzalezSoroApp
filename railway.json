@@ -1,0 +1,10 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "expo export --platform web"
+  },
+  "deploy": {
+    "startCommand": "npx expo start --web --no-dev",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
