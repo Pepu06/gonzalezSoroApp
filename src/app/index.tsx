@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { theme } from "@/theme";
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
+import { ActivityIndicator, StyleSheet } from "react-native";
 
 export default function Index() {
   const { user, loading } = useAuth();
@@ -14,7 +14,7 @@ export default function Index() {
       if (user) {
         router.replace("/(tabs)/dashboard");
       } else {
-        router.replace("/login");
+        router.replace("/(tabs)/dashboard");
       }
     }
   }, [loading, user]);

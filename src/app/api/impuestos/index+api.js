@@ -1,6 +1,5 @@
 import { obtenerSpreadsheetId } from "../busca_id+api";
 import { sheets } from "../lib/google+api";
-import { enviarMail } from "../lib/mailer+api";
 
 const ROOT_FOLDER_ID = "1Sa9TRwwCzVv2bqS21AQV79yBavsyPJ-s";
 
@@ -192,18 +191,6 @@ export async function POST(req) {
             n8nResult = await n8nResponse.json();
             console.log("Confirmación de n8n:", n8nResult);
         }
-
-        await enviarMail({
-            to: "mvcalvar@gmail.com",
-            subject: `📎 Impuesto actualizado – ${departamento} / ${impuesto}`,
-            html: `
-                <h2>Impuesto actualizado en el spreadsheet</h2>
-                <p><strong>Departamento:</strong> ${departamento}</p>
-                <p><strong>Impuesto:</strong> ${impuesto}</p>
-                <p><strong>Mes:</strong> ${mes}</p>
-                <p><strong>Monto:</strong> $${importe}</p>
-            `,
-        });
 
         return Response.json({ ok: true, rango, n8n: n8nResult });
     } catch (err) {
