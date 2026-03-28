@@ -14,7 +14,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://gonzalez-soro-app.vercel.app/"
+        "EXPO_PUBLIC_API_URL": "https://gonzalezsoroapp-production.up.railway.app"
       }
     },
     "production": {
