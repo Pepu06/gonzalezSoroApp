@@ -7,14 +7,14 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Dimensions,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Dimensions,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -64,7 +64,7 @@ export default function DashboardScreen() {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/impuestos?departamento=${encodeURIComponent(user.departamento)}`);
+      const response = await fetch(`${API_URL}/api/impuestos?departamento=${encodeURIComponent(user.departamento)}`);
       const data = await response.json();
 
       if (data.ok) {

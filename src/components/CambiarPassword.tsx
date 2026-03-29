@@ -2,13 +2,13 @@ import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  ActivityIndicator, Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform, ScrollView,
-  StyleSheet,
-  Text, TextInput, TouchableOpacity,
-  View,
+    ActivityIndicator, Alert,
+    KeyboardAvoidingView,
+    Modal,
+    Platform, ScrollView,
+    StyleSheet,
+    Text, TextInput, TouchableOpacity,
+    View,
 } from "react-native";
 
 const Field = React.memo(({
@@ -80,7 +80,7 @@ export default function CambiarPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/auth/cambiar-password`, {
+      const res = await fetch(`${API_URL}/api/auth/cambiar-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ departamento: user.departamento, passwordActual: form.actual, passwordNueva: form.nueva }),

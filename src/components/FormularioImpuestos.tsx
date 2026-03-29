@@ -5,17 +5,17 @@ import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator, Alert,
-  FlatList,
-  Image,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text, TextInput, TouchableOpacity,
-  View,
+    ActivityIndicator, Alert,
+    FlatList,
+    Image,
+    KeyboardAvoidingView,
+    Modal,
+    Platform,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text, TextInput, TouchableOpacity,
+    View,
 } from "react-native";
 
 // ─── Datos ────────────────────────────────────────────────────────────────────
@@ -265,7 +265,7 @@ export default function FormularioImpuestos() {
       if (comprobante) {
         data.append("comprobante", { uri: comprobante.uri, name: comprobante.name, type: comprobante.type } as any);
       }
-      const res = await fetch(`/api/impuestos`, { method: "POST", body: data });
+      const res = await fetch(`${API_URL}/api/impuestos`, { method: "POST", body: data });
       if (!res.ok) throw new Error(await res.text());
       Alert.alert("Guardado", "Impuesto registrado correctamente.", [
         {
