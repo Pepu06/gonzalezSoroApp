@@ -32,7 +32,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
+      const response = await fetch(`/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
@@ -58,12 +58,7 @@ export default function Login() {
   return (
     <>
       <StatusBar style="light" />
-      <LinearGradient
-        colors={theme.colors.gradients.dark as unknown as readonly [string, string, ...string[]]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.container}
-      >
+      <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardView}
@@ -107,8 +102,8 @@ export default function Login() {
 
               <View style={styles.form}>
                 <Input
-                  label="Contraseña"
                   value={password}
+                  placeholder="Contraseña"
                   onChangeText={setPassword}
                   secureTextEntry
                   showPasswordToggle
@@ -161,7 +156,7 @@ export default function Login() {
             </Animated.View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </LinearGradient>
+      </View>
     </>
   );
 }
@@ -206,10 +201,10 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.xs,
   },
   card: {
-    backgroundColor: 'rgba(30, 41, 59, 0.6)',
+    backgroundColor: theme.colors.background.card,
     borderRadius: theme.borderRadius.xl,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: theme.colors.border.light,
     padding: theme.spacing.xl,
     ...theme.shadows.lg,
   },
@@ -232,20 +227,21 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    gap: theme.spacing.md,     // ← agregá gap
     marginTop: theme.spacing['3xl'],
-    paddingHorizontal: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
   },
   feature: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
+    gap: theme.spacing.xs,
   },
   featureIcon: {
     width: 32,
     height: 32,
     borderRadius: theme.borderRadius.full,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: theme.colors.surface[200],
     alignItems: 'center',
     justifyContent: 'center',
   },

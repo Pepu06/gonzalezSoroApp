@@ -45,7 +45,8 @@ function obtenerFila(anio, mes) {
 
 function parsearImporte(valor) {
     if (!valor) return 0;
-    return parseFloat(valor.toString().replace(/[$\s.]/g, '').replace(',', '.')) || 0;
+    // Formato americano: "  1,225.00 " → 1225.00
+    return parseFloat(valor.toString().trim().replace(/,/g, '')) || 0;
 }
 
 export async function GET(req) {

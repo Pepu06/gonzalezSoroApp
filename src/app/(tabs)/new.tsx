@@ -1,23 +1,20 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import FormularioImpuestos from '@/components/FormularioImpuestos';
 import { theme } from '@/theme';
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NewPaymentScreen() {
   return (
     <>
       <StatusBar style="light" />
-      <LinearGradient
-        colors={theme.colors.gradients.dark}
-        style={styles.container}
-      >
+      <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+
         <SafeAreaView style={styles.safeArea} edges={['top']}>
           <FormularioImpuestos />
         </SafeAreaView>
-      </LinearGradient>
+      </View>
     </>
   );
 }

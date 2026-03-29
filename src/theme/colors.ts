@@ -1,33 +1,33 @@
 export const colors = {
-  // Primary - Indigo/Purple gradient
+  // Primary - Green palette
   primary: {
-    50: '#eef2ff',
-    100: '#e0e7ff',
-    200: '#c7d2fe',
-    300: '#a5b4fc',
-    400: '#818cf8',
-    500: '#6366f1',
-    600: '#4f46e5',
-    700: '#4338ca',
-    800: '#3730a3',
-    900: '#312e81',
+    50: '#f0fdf4',
+    100: '#dcfce7',
+    200: '#A6EBC9',
+    300: '#5EEB5B',
+    400: '#61FF7E',
+    500: '#62AB37',
+    600: '#4d8a2b',
+    700: '#3a6920',
+    800: '#274816',
+    900: '#393424',
   },
 
-  // Secondary - Purple
+  // Secondary - Teal/Mint
   secondary: {
-    50: '#faf5ff',
-    100: '#f3e8ff',
-    200: '#e9d5ff',
-    300: '#d8b4fe',
-    400: '#c084fc',
-    500: '#a855f7',
-    600: '#9333ea',
-    700: '#7e22ce',
-    800: '#6b21a8',
-    900: '#581c87',
+    50: '#f0fdf9',
+    100: '#ccfbef',
+    200: '#99f6e0',
+    300: '#5eead4',
+    400: '#2dd4bf',
+    500: '#14b8a6',
+    600: '#0d9488',
+    700: '#0f766e',
+    800: '#115e59',
+    900: '#134e4a',
   },
 
-  // Accent - Cyan/Teal
+  // Accent - keeping teal
   accent: {
     50: '#ecfeff',
     100: '#cffafe',
@@ -97,62 +97,62 @@ export const colors = {
     900: '#1e3a8a',
   },
 
-  // Background - Dark theme
+  // Background - Light theme
   background: {
-    primary: '#0f172a',      // slate-900
-    secondary: '#1e293b',    // slate-800
-    tertiary: '#334155',     // slate-700
-    card: '#1e293b',         // slate-800
-    modal: 'rgba(15, 23, 42, 0.95)',
+    primary: '#f8fafc',      // slate-50
+    secondary: '#f1f5f9',    // slate-100
+    tertiary: '#e2e8f0',     // slate-200
+    card: '#ffffff',
+    modal: 'rgba(248, 250, 252, 0.95)',
   },
 
   // Surface
   surface: {
-    100: '#1e293b',
-    200: '#334155',
-    300: '#475569',
+    100: '#ffffff',
+    200: '#f1f5f9',
+    300: '#e2e8f0',
   },
 
   // Text
   text: {
-    primary: '#f1f5f9',      // slate-100
-    secondary: '#cbd5e1',    // slate-300
-    tertiary: '#94a3b8',     // slate-400
-    disabled: '#64748b',     // slate-500
-    inverse: '#0f172a',      // slate-900
+    primary: '#0f172a',      // slate-900
+    secondary: '#334155',    // slate-700
+    tertiary: '#64748b',     // slate-500
+    disabled: '#94a3b8',     // slate-400
+    inverse: '#f8fafc',      // slate-50
   },
 
   // Border
   border: {
-    light: '#334155',        // slate-700
-    medium: '#475569',       // slate-600
-    dark: '#1e293b',         // slate-800
+    light: '#e2e8f0',        // slate-200
+    medium: '#cbd5e1',       // slate-300
+    dark: '#94a3b8',         // slate-400
   },
 
   // Overlay
   overlay: {
-    light: 'rgba(0, 0, 0, 0.3)',
-    medium: 'rgba(0, 0, 0, 0.5)',
-    dark: 'rgba(0, 0, 0, 0.7)',
+    light: 'rgba(0, 0, 0, 0.1)',
+    medium: 'rgba(0, 0, 0, 0.3)',
+    dark: 'rgba(0, 0, 0, 0.5)',
   },
 
   // Gradients
   gradients: {
-    primary: ['#6366f1', '#8b5cf6'],
-    secondary: ['#06b6d4', '#3b82f6'],
-    accent: ['#ec4899', '#8b5cf6'],
-    success: ['#10b981', '#06b6d4'],
-    dark: ['#1e293b', '#0f172a'],
-    purple: ['#a855f7', '#6366f1'],
-    blue: ['#3b82f6', '#06b6d4'],
+    primary: ['#61FF7E', '#62AB37'],
+    secondary: ['#A6EBC9', '#5EEB5B'],
+    accent: ['#5EEB5B', '#62AB37'],
+    success: ['#10b981', '#62AB37'],
+    dark: ['#f1f5f9', '#e2e8f0'],
+    purple: ['#62AB37', '#393424'],
+    blue: ['#A6EBC9', '#61FF7E'],
   },
 
   // Status
   status: {
-    paid: '#22c55e',         // green-500
-    pending: '#f59e0b',      // amber-500
-    overdue: '#ef4444',      // red-500
-    upcoming: '#3b82f6',     // blue-500
+    paid: '#62AB37',
+    pending: '#f59e0b',
+    overdue: '#ef4444',
+    upcoming: '#5EEB5B',
   },
 
   // Utility

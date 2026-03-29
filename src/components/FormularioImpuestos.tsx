@@ -265,7 +265,7 @@ export default function FormularioImpuestos() {
       if (comprobante) {
         data.append("comprobante", { uri: comprobante.uri, name: comprobante.name, type: comprobante.type } as any);
       }
-      const res = await fetch(`${API_URL}/api/impuestos`, { method: "POST", body: data });
+      const res = await fetch(`/api/impuestos`, { method: "POST", body: data });
       if (!res.ok) throw new Error(await res.text());
       Alert.alert("Guardado", "Impuesto registrado correctamente.", [
         {
@@ -296,9 +296,6 @@ export default function FormularioImpuestos() {
       >
         {/* Header */}
         <View style={s.header}>
-          <View style={s.headerIcon}>
-            <Ionicons name="document-text-outline" size={28} color="#2563eb" />
-          </View>
           <Text style={s.title}>Gestión de Impuestos</Text>
           <Text style={s.subtitle}>Cargá los impuestos de manera simple y organizada</Text>
         </View>
@@ -427,7 +424,6 @@ export default function FormularioImpuestos() {
           </TouchableOpacity>
         </View>
 
-        <Text style={s.footer}>Los datos se guardan automáticamente en Google Sheets</Text>
       </ScrollView>
 
       {/* Modals */}

@@ -1,4 +1,5 @@
-import { Badge, Button, Card, IconButton, Input } from '@/components/ui';
+import CambiarPassword from '@/components/CambiarPassword';
+import { Badge, Button } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
 import { theme } from '@/theme';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,11 +9,10 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import {
   Alert,
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,7 +20,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const router = useRouter();
-  const [showChangePassword, setShowChangePassword] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -45,53 +44,6 @@ export default function ProfileScreen() {
         },
       ]
     );
-  };
-
-  const handleChangePassword = async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert('Error', 'Por favor completa todos los campos');
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      Alert.alert('Error', 'Las contraseñas nuevas no coinciden');
-      return;
-    }
-
-    if (newPassword.length < 4) {
-      Alert.alert('Error', 'La nueva contraseña debe tener al menos 4 caracteres');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/api/auth/cambiar-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          departamento: user?.departamento,
-          passwordActual: currentPassword,
-          passwordNueva: newPassword,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al cambiar contraseña');
-      }
-
-      Alert.alert('Éxito', 'Contraseña actualizada correctamente');
-      setShowChangePassword(false);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } catch (error: any) {
-      console.error('Error cambiar password:', error);
-      Alert.alert('Error', error.message || 'No se pudo cambiar la contraseña');
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -138,33 +90,7 @@ export default function ProfileScreen() {
               entering={FadeInDown.delay(200).duration(600)}
               style={styles.menu}
             >
-              <Card
-                variant="glass"
-                padding="md"
-                style={styles.menuItem}
-                onPress={() => setShowChangePassword(true)}
-              >
-                <View style={styles.menuItemContent}>
-                  <View style={styles.menuIconContainer}>
-                    <Ionicons
-                      name="lock-closed-outline"
-                      size={24}
-                      color={theme.colors.primary[400]}
-                    />
-                  </View>
-                  <View style={styles.menuText}>
-                    <Text style={styles.menuTitle}>Cambiar Contraseña</Text>
-                    <Text style={styles.menuSubtitle}>
-                      Actualizar tu contraseña de acceso
-                    </Text>
-                  </View>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color={theme.colors.text.tertiary}
-                  />
-                </View>
-              </Card>
+              <CambiarPassword />
             </Animated.View>
 
             {/* Logout Button */}
@@ -182,9 +108,16 @@ export default function ProfileScreen() {
                   <Ionicons
                     name="log-out-outline"
                     size={20}
-                    color={theme.colors.primary[400]}
+                    color={theme.colors.error[500]}
                   />
                 }
+                style={{
+                  borderColor: theme.colors.error[500],
+                  backgroundColor: theme.colors.error[50],
+                }}
+                textStyle={{
+                  color: theme.colors.error[500],
+                }}
               />
             </Animated.View>
 
@@ -194,83 +127,6 @@ export default function ProfileScreen() {
             <View style={{ height: 120 }} />
           </ScrollView>
         </SafeAreaView>
-
-        {/* Change Password Modal */}
-        <Modal
-          visible={showChangePassword}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setShowChangePassword(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <SafeAreaView style={styles.modalSafeArea}>
-              <View style={styles.modalContent}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>Cambiar Contraseña</Text>
-                  <IconButton
-                    icon="close"
-                    onPress={() => setShowChangePassword(false)}
-                    variant="ghost"
-                    size="sm"
-                  />
-                </View>
-
-                <Card variant="glass" padding="lg">
-                  <Input
-                    label="Contraseña Actual"
-                    value={currentPassword}
-                    onChangeText={setCurrentPassword}
-                    secureTextEntry
-                    showPasswordToggle
-                    icon="lock-closed"
-                    autoCapitalize="none"
-                    editable={!loading}
-                  />
-
-                  <Input
-                    label="Nueva Contraseña"
-                    value={newPassword}
-                    onChangeText={setNewPassword}
-                    secureTextEntry
-                    showPasswordToggle
-                    icon="key"
-                    autoCapitalize="none"
-                    editable={!loading}
-                  />
-
-                  <Input
-                    label="Confirmar Nueva Contraseña"
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    secureTextEntry
-                    showPasswordToggle
-                    icon="key"
-                    autoCapitalize="none"
-                    editable={!loading}
-                  />
-
-                  <View style={styles.modalButtons}>
-                    <Button
-                      title="Cancelar"
-                      onPress={() => setShowChangePassword(false)}
-                      variant="ghost"
-                      disabled={loading}
-                      style={{ flex: 1 }}
-                    />
-                    <Button
-                      title="Guardar"
-                      onPress={handleChangePassword}
-                      variant="gradient"
-                      loading={loading}
-                      disabled={loading}
-                      style={{ flex: 1 }}
-                    />
-                  </View>
-                </Card>
-              </View>
-            </SafeAreaView>
-          </View>
-        </Modal>
       </LinearGradient>
     </>
   );
@@ -308,7 +164,9 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     marginBottom: theme.spacing.xl,
   },
-  menuItem: {},
+  menuItem: {
+    backgroundColor: theme.colors.background.card,
+  },
   menuItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -317,7 +175,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: theme.borderRadius.md,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: `${theme.colors.primary[500]}20`,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: theme.spacing.md,
@@ -345,7 +203,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: theme.colors.overlay.dark,
+    backgroundColor: theme.colors.overlay.medium,
   },
   modalSafeArea: {
     flex: 1,

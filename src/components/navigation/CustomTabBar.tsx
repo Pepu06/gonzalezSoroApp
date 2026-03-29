@@ -1,13 +1,13 @@
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { BlurView } from 'expo-blur';
+import React from 'react';
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { BlurView } from 'expo-blur';
 import { theme } from '../../theme';
 
 export const CustomTabBar: React.FC<BottomTabBarProps> = ({
@@ -17,7 +17,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <BlurView intensity={80} tint="dark" style={styles.tabBar}>
+      <BlurView intensity={80} tint="light" style={styles.tabBar}>
         <View style={styles.tabBarInner}>
           {state.routes.map((route, index) => {
             const { options } = descriptors[route.key];
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: theme.colors.border.light,
     ...theme.shadows.lg,
   },
   tabBarInner: {
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: theme.borderRadius.full,
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
+    backgroundColor: `${theme.colors.primary[500]}20`,
   },
   indicator: {
     position: 'absolute',

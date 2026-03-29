@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   RefreshControl,
   ScrollView,
@@ -40,17 +41,13 @@ interface Stats {
 }
 
 const formatARS = (valor: number) => {
-  const str = String(valor).padStart(3, '0');
-  const centavos = str.slice(-2);
-  const enteros = str.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  return `$${enteros},${centavos}`;
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'ARS',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(valor);
 };
-
-function parsearImporte(valor) {
-  if (!valor) return 0;
-  const float = parseFloat(valor.toString().replace(/[$\s.]/g, '').replace(',', '.')) || 0;
-  return Math.round(float * 100); // devuelve centavos como entero
-}
 
 export default function DashboardScreen() {
   const { user } = useAuth();
@@ -67,7 +64,7 @@ export default function DashboardScreen() {
 
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/api/impuestos?departamento=${encodeURIComponent(user.departamento)}`);
+      const response = await fetch(`/api/impuestos?departamento=${encodeURIComponent(user.departamento)}`);
       const data = await response.json();
 
       if (data.ok) {
@@ -104,22 +101,25 @@ export default function DashboardScreen() {
   return (
     <>
       <StatusBar style="light" />
-      <LinearGradient
-        colors={theme.colors.gradients.dark}
-        style={styles.container}
-      >
+      <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
         <SafeAreaView style={styles.safeArea} edges={['top']}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                tintColor={theme.colors.primary[400]}
-              />
-            }
-          >
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={theme.colors.primary[500]} />
+              <Text style={styles.loadingText}>Cargando...</Text>
+            </View>
+          ) : (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scrollContent}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  tintColor={theme.colors.primary[400]}
+                />
+              }
+            >
             {/* Header */}
             <Animated.View
               entering={FadeInDown.delay(100).duration(600)}
@@ -151,7 +151,7 @@ export default function DashboardScreen() {
                 activeOpacity={0.9}
               >
                 <LinearGradient
-                  colors={theme.colors.gradients.primary}
+                  colors={theme.colors.gradients.primary as unknown as readonly [string, string, ...string[]]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.primaryActionCard}
@@ -177,16 +177,16 @@ export default function DashboardScreen() {
             </Animated.View>
 
             {/* Stats Cards */}
-            {stats && (
-              <Animated.View
-                entering={FadeInDown.delay(300).duration(600)}
-                style={styles.section}
-              >
-                <Text style={styles.sectionTitle}>Resumen</Text>
-                <Card variant="glass" padding="lg" style={styles.statCardFull}>
+            <Animated.View
+              entering={FadeInDown.delay(300).duration(600)}
+              style={styles.section}
+            >
+              <Text style={styles.sectionTitle}>Resumen</Text>
+              {stats ? (
+                <Card variant="elevated" padding="lg" style={styles.statCardFull}>
                   <View style={styles.statCardHeader}>
                     <LinearGradient
-                      colors={theme.colors.gradients.primary}
+                      colors={theme.colors.gradients.primary as unknown as readonly [string, string, ...string[]]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={styles.statIcon}
@@ -197,8 +197,18 @@ export default function DashboardScreen() {
                   </View>
                   <Text style={styles.statValue}>{formatARS(stats.totalMesActual)}</Text>
                 </Card>
-              </Animated.View>
-            )}
+              ) : (
+                <Card variant="elevated" padding="lg" style={styles.statCardFull}>
+                  <View style={styles.statCardHeader}>
+                    <View style={[styles.statIcon, { backgroundColor: theme.colors.background.secondary }]}>
+                      <Ionicons name="wallet" size={20} color={theme.colors.text.tertiary} />
+                    </View>
+                    <Text style={styles.statLabel}>Total {mesActual}</Text>
+                  </View>
+                  <Text style={styles.statValue}>{formatARS(0)}</Text>
+                </Card>
+              )}
+            </Animated.View>
 
             {/* Historial Reciente */}
             <Animated.View
@@ -206,11 +216,7 @@ export default function DashboardScreen() {
               style={styles.section}
             >
               <Text style={styles.sectionTitle}>Historial Reciente</Text>
-              {loading ? (
-                <Card variant="glass" padding="lg">
-                  <Text style={styles.emptyText}>Cargando...</Text>
-                </Card>
-              ) : registrosRecientes.length === 0 ? (
+              {registrosRecientes.length === 0 ? (
                 <Card variant="glass" padding="xl">
                   <Ionicons
                     name="document-text-outline"
@@ -280,11 +286,7 @@ export default function DashboardScreen() {
                         key={item.nombre}
                         entering={FadeInRight.delay(600 + index * 100).duration(600)}
                       >
-                        <Card
-                          variant="glass"
-                          padding="md"
-                          style={styles.statsDetailCard}
-                        >
+                        <Card variant="elevated" padding="md" style={styles.statsDetailCard}>
                           <View style={styles.statsDetailContent}>
                             <Text style={styles.statsDetailLabel}>
                               {item.nombre}
@@ -313,8 +315,9 @@ export default function DashboardScreen() {
             {/* Bottom Padding for Tab Bar */}
             <View style={{ height: 120 }} />
           </ScrollView>
+          )}
         </SafeAreaView>
-      </LinearGradient>
+      </View>
     </>
   );
 }
@@ -325,6 +328,17 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacing.md,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: theme.colors.text.tertiary,
+    marginTop: theme.spacing.sm,
   },
   scrollContent: {
     padding: theme.spacing.lg,
@@ -497,7 +511,7 @@ const styles = StyleSheet.create({
   },
   statsDetailBar: {
     height: 6,
-    backgroundColor: theme.colors.surface[200],
+    backgroundColor: theme.colors.border.light,
     borderRadius: theme.borderRadius.sm,
     overflow: 'hidden',
   },

@@ -3,11 +3,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
-  ActivityIndicator, KeyboardAvoidingView,
-  Platform, ScrollView,
-  StyleSheet,
-  Text, TextInput, TouchableOpacity,
-  View,
+    ActivityIndicator, KeyboardAvoidingView,
+    Platform, ScrollView,
+    StyleSheet,
+    Text, TextInput, TouchableOpacity,
+    View,
 } from "react-native";
 
 export default function LoginContent() {
@@ -25,7 +25,7 @@ export default function LoginContent() {
     if (!password) { setError("Ingresá tu contraseña"); return; }
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
+      const res = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),

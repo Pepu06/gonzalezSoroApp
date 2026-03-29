@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator, Alert,
   KeyboardAvoidingView,
@@ -10,6 +10,44 @@ import {
   Text, TextInput, TouchableOpacity,
   View,
 } from "react-native";
+
+const Field = React.memo(({
+  id, label, placeholder, form, show, setForm, setShow,
+}: {
+  id: "actual" | "nueva" | "confirmar";
+  label: string;
+  placeholder?: string;
+  form: any;
+  show: any;
+  setForm: any;
+  setShow: any;
+}) => (
+  <View style={s.fieldWrap}>
+    <Text style={s.label}>{label}</Text>
+    <View style={s.inputRow}>
+      <TextInput
+        style={s.input}
+        value={form[id]}
+        onChangeText={v => setForm((f: any) => ({ ...f, [id]: v }))}
+        secureTextEntry={!show[id]}
+        placeholder={placeholder || "••••••••"}
+        placeholderTextColor="#94a3b8"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      <TouchableOpacity
+        onPress={() => setShow((sh: any) => ({ ...sh, [id]: !sh[id] }))}
+        style={s.eye}
+      >
+        <Ionicons
+          name={show[id] ? "eye-off-outline" : "eye-outline"}
+          size={20}
+          color="#475569"
+        />
+      </TouchableOpacity>
+    </View>
+  </View>
+));
 
 export default function CambiarPassword() {
   const { user, logout } = useAuth();
@@ -42,7 +80,7 @@ export default function CambiarPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/auth/cambiar-password`, {
+      const res = await fetch(`/api/auth/cambiar-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ departamento: user.departamento, passwordActual: form.actual, passwordNueva: form.nueva }),
@@ -59,85 +97,75 @@ export default function CambiarPassword() {
     }
   };
 
-  const Field = ({
-    id, label, placeholder,
-  }: { id: "actual" | "nueva" | "confirmar"; label: string; placeholder?: string }) => (
-    <View style={s.fieldWrap}>
-      <Text style={s.label}>{label}</Text>
-      <View style={s.inputRow}>
-        <TextInput
-          style={s.input}
-          value={form[id]}
-          onChangeText={v => setForm(f => ({ ...f, [id]: v }))}
-          secureTextEntry={!show[id]}
-          placeholder={placeholder || "••••••••"}
-          placeholderTextColor="#94a3b8"
-          autoCapitalize="none"
-        />
-        <TouchableOpacity
-          onPress={() => setShow(sh => ({ ...sh, [id]: !sh[id] }))}
-          style={s.eye}
-          accessibilityRole="button"
-          accessibilityLabel={show[id] ? "Ocultar contraseña" : "Mostrar contraseña"}
-        >
-          <Ionicons
-            name={show[id] ? "eye-off-outline" : "eye-outline"}
-            size={20}
-            color="#475569"
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
   return (
     <>
-      <TouchableOpacity style={s.trigger} onPress={() => setOpen(true)} activeOpacity={0.8}>
-        <Ionicons name="key-outline" size={14} color="#334155" />
-        <Text style={s.triggerText}>Cambiar Contraseña</Text>
+      <TouchableOpacity
+        onPress={() => setOpen(true)}
+        activeOpacity={0.8}
+        style={s.triggerCard}
+      >
+        <View style={s.menuItemContent}>
+          <View style={s.menuIconContainer}>
+            <Ionicons name="lock-closed-outline" size={24} color="#62AB37" />
+          </View>
+          <View style={s.menuText}>
+            <Text style={s.menuTitle}>Cambiar Contraseña</Text>
+            <Text style={s.menuSubtitle}>Actualizar tu contraseña de acceso</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#94a3b8" />
+        </View>
       </TouchableOpacity>
 
-      <Modal visible={open} transparent animationType="slide" onRequestClose={close}>
-        <KeyboardAvoidingView
-          style={s.overlay}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-        >
-          <View style={s.sheet}>
-            <View style={s.handle} />
-
-            <View style={s.sheetHeader}>
-              <Text style={s.sheetTitle}>Cambiar Contraseña</Text>
-              <Text style={s.sheetSub}>Dpto: <Text style={{ fontWeight: "700" }}>{user?.departamento}</Text></Text>
-            </View>
-
-            <ScrollView showsVerticalScrollIndicator={false} style={{ gap: 0 }}>
-              <View style={s.fields}>
-                <Field id="actual" label="Contraseña actual" />
-                <Field id="nueva" label="Nueva contraseña" placeholder="Mínimo 6 caracteres" />
-                <Field id="confirmar" label="Confirmar nueva contraseña" placeholder="Repetí la nueva contraseña" />
-
-                {error ? (
-                  <View style={s.errorBox}>
-                    <Text style={s.errorTxt}>{error}</Text>
-                  </View>
-                ) : null}
-
-                <View style={s.actions}>
-                  <TouchableOpacity style={s.cancelBtn} onPress={close}>
-                    <Text style={s.cancelTxt}>Cancelar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[s.saveBtn, (!canSubmit || loading) && s.saveBtnDisabled]}
-                    onPress={handleSubmit}
-                    disabled={!canSubmit || loading}
-                  >
-                    {loading ? <ActivityIndicator color="#fff" size="small" /> : <Text style={s.saveTxt}>Guardar</Text>}
-                  </TouchableOpacity>
-                </View>
+      <Modal
+        visible={open}
+        transparent
+        animationType="slide"
+        onRequestClose={close}
+        statusBarTranslucent
+      >
+        <View style={s.overlay}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={close}
+            activeOpacity={1}
+          />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+          >
+            <View style={s.sheet}>
+              <View style={s.handle} />
+              <View style={s.sheetHeader}>
+                <Text style={s.sheetTitle}>Cambiar Contraseña</Text>
+                <Text style={s.sheetSub}>Dpto: <Text style={{ fontWeight: "700" }}>{user?.departamento}</Text></Text>
               </View>
-            </ScrollView>
-          </View>
-        </KeyboardAvoidingView>
+              <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                <View style={s.fields}>
+                  <Field id="actual" label="Contraseña actual" form={form} show={show} setForm={setForm} setShow={setShow} />
+                  <Field id="nueva" label="Nueva contraseña" placeholder="Mínimo 6 caracteres" form={form} show={show} setForm={setForm} setShow={setShow} />
+                  <Field id="confirmar" label="Confirmar nueva contraseña" placeholder="Repetí la nueva contraseña" form={form} show={show} setForm={setForm} setShow={setShow} />
+                  {error ? (
+                    <View style={s.errorBox}>
+                      <Text style={s.errorTxt}>{error}</Text>
+                    </View>
+                  ) : null}
+                  <View style={s.actions}>
+                    <TouchableOpacity style={s.cancelBtn} onPress={close}>
+                      <Text style={s.cancelTxt}>Cancelar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[s.saveBtn, (!canSubmit || loading) && s.saveBtnDisabled]}
+                      onPress={handleSubmit}
+                      disabled={!canSubmit || loading}
+                    >
+                      {loading ? <ActivityIndicator color="#fff" size="small" /> : <Text style={s.saveTxt}>Guardar</Text>}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
     </>
   );
@@ -197,4 +225,24 @@ const s = StyleSheet.create({
   },
   saveBtnDisabled: { opacity: 0.6 },
   saveTxt: { fontSize: 15, fontWeight: "800", color: "#fff" },
+  triggerCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  menuItemContent: { flexDirection: 'row', alignItems: 'center' },
+  menuIconContainer: {
+    width: 48, height: 48, borderRadius: 12,
+    backgroundColor: '#62AB3720',
+    alignItems: 'center', justifyContent: 'center',
+    marginRight: 14,
+  },
+  menuText: { flex: 1 },
+  menuTitle: { fontSize: 16, fontWeight: '600', color: '#0f172a', marginBottom: 2 },
+  menuSubtitle: { fontSize: 13, color: '#64748b' },
 });
